@@ -8,7 +8,8 @@ const Schema = mongoose.Schema;
     password: {type: String, required: true },
     favourites: [{type: mongoose.Schema.Types.ObjectId, ref: 'Movies'}]
   });
-  
+
+
   UserSchema.statics.findByUserName = function (username) {
     return this.findOne({ username: username });
   };
@@ -42,5 +43,12 @@ const Schema = mongoose.Schema;
     }
 });
 
+const passwordValidator = (password) => {
+  let passwordRegEx = /^(?=.*?[a-zA-Z])(?=.*?[0-9])[\w@#$.%^?~-]{5,}$/;
+  return passwordRegEx.test(password);
+};
+
+
+UserSchema.path('password').validate(passwordValidator);
 
 export default mongoose.model('User', UserSchema);
